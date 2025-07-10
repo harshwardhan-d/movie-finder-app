@@ -1,69 +1,60 @@
 async function moviesData(movieName) {
-    try {
-      let jsonData = await fetch(`/movies?q=${movieName}`);
-      let res = await jsonData.json();
+  try {
+    let jsonData = await fetch(`/movies?q=${movieName}`);
+    let res = await jsonData.json();
 
-      console.log("Movie Data from Backend:", res);
-  
-      if (!res.omdb || !res.omdb.Search) {
-        console.log("No movies found");
-        return {
-          response: [],
-          Length: 0
-        };
-      }
-  
+    console.log("Movie Data from Backend:", res);
+
+    if (!res.omdb || !res.omdb.Search) {
+      console.log("No movies found");
       return {
-        response: res.omdb.Search,
-        Length: res.omdb.Search.length,
-        fullInfo: res.moreInfo
+        response: [],
+        Length: 0
       };
-    } catch (error) {
-      console.log("error");
-      console.log(error);
     }
+    return {
+      response: res.omdb.Search,
+      Length: res.omdb.Search.length,
+      fullInfo: res.moreInfo
+    };
+  } catch (error) {
+    console.log("error");
+    console.log(error);
   }
-  
-  let resultsContainer = document.getElementById("resultsContainer");
-  
-  async function searchMovie() {
-    console.log("Search triggered"); 
-    let inputBox = document.getElementById("movieInput");
-    let movieName = inputBox.value;
-    let loader = document.getElementById("loader");
-    loader.style.display = "block";
-  
-    let data = await moviesData(movieName);
-    loader.style.display = "none";
-    resultsContainer.innerHTML = "";
+}
+let resultsContainer = document.getElementById("resultsContainer");
+async function searchMovie() {
+  console.log("Search triggered");
+  let inputBox = document.getElementById("movieInput");
+  let movieName = inputBox.value;
+  let loader = document.getElementById("loader");
+  loader.style.display = "block";
 
-    if (!data || data.Length === 0) {
-        resultsContainer.innerHTML = "<p style='color:white;text-align:center'>No movies found.</p>";
-        console.log("No valid data returned from backend.");
-        return;
-      }
-      
-  
-    for (let i = 0; i < data.Length; i++) {
-      let movieCards = document.createElement("div");
-      movieCards.classList.add("movie-card");
-      resultsContainer.appendChild(movieCards);
-  
-      let poster = data.response[i].Poster;
-      let image = document.createElement("img");
-     
-image.src = poster !== "N/A" ? poster : "images/noposter.webp";
-image.onerror = () => {
-    image.src = "images/noposter.webp";
-  };
+  let data = await moviesData(movieName);
+  loader.style.display = "none";
+  resultsContainer.innerHTML = "";
 
+  if (!data || data.Length === 0) {
+    resultsContainer.innerHTML = "<p style='color:white;text-align:center'>No movies found.</p>";
+    console.log("No valid data returned from backend.");
+    return;
+  }
+  for (let i = 0; i < data.Length; i++) {
+    let movieCards = document.createElement("div");
+    movieCards.classList.add("movie-card");
+    resultsContainer.appendChild(movieCards);
+    let poster = data.response[i].Poster;
+    let image = document.createElement("img");
 
-      movieCards.appendChild(image);
-  
-      let fullMovie = data.fullInfo[i];
-      let movieInfo = document.createElement("div");
-      movieInfo.classList.add("movie-info");
-      movieInfo.innerHTML = `
+    image.src = poster !== "N/A" ? poster : "images/noposter.webp";
+    image.onerror = () => {
+      image.src = "images/noposter.webp";
+    };
+    movieCards.appendChild(image);
+    let fullMovie = data.fullInfo[i];
+    let movieInfo = document.createElement("div");
+    movieInfo.classList.add("movie-info");
+    movieInfo.innerHTML = `
         <h2>${data.response[i].Title} ${data.response[i].Year}</h2>
         <p><strong>IMDb:</strong> ⭐ ${fullMovie.imdbRating}</p>
         <p><strong>Genre:</strong> ${fullMovie.Genre}</p>
@@ -76,43 +67,41 @@ image.onerror = () => {
           </a>
         </div>
       `;
-      movieCards.appendChild(movieInfo);
-    }
+    movieCards.appendChild(movieInfo);
   }
-  
-  let inputBox = document.getElementById("movieInput");
-  inputBox.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") {
-      searchMovie();
-    }
-  });
-  
-  function changeBackdrop() {
-    const backdrops = [
-      "images/dune.webp",
-      "images/batman.webp",
-      "images/interstellar.webp",
-      "images/something.webp",
-      "images/harrypotter.webp",
-      "images/avengers.webp",
-      "images/rings.webp"
-    ];
-    let currentIndex = 0;
-  
-    function updateBackground() {
-      document.body.style.backgroundImage = `url('${backdrops[currentIndex]}')`;
-      document.body.style.backgroundSize = "cover";
-      document.body.style.backgroundPosition = "center";
-      document.body.style.backgroundRepeat = "no-repeat";
-      document.body.style.backgroundAttachment = "fixed";
+}
+
+let inputBox = document.getElementById("movieInput");
+inputBox.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") {
+    searchMovie();
+  }
+});
+
+function changeBackdrop() {
+  const backdrops = [
+    "images/dune.webp",
+    "images/batman.webp",
+    "images/interstellar.webp",
+    "images/something.webp",
+    "images/harrypotter.webp",
+    "images/avengers.webp",
+    "images/rings.webp"
+  ];
+  let currentIndex = 0;
+  function updateBackground() {
+    document.body.style.setProperty('--fade-opacity', '0')
+    setTimeout(() => {
+      document.body.style.setProperty('--bg-url', `url('${backdrops[currentIndex]}')`);
+      document.body.style.setProperty('--fade-opacity', '1');
       currentIndex = (currentIndex + 1) % backdrops.length;
-    }
-  
-    updateBackground();
-    setInterval(updateBackground, 5000);
+    }, 1000);
   }
-  
-  document.addEventListener("DOMContentLoaded", () => {
-    changeBackdrop();
-  });
-  
+  document.body.style.setProperty('--bg-url', `url('${backdrops[currentIndex]}')`);
+  document.body.style.setProperty('--fade-opacity', '1');
+  updateBackground();
+  setInterval(updateBackground, 15000);
+}
+document.addEventListener("DOMContentLoaded", () => {
+  changeBackdrop();
+});
