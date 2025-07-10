@@ -24,6 +24,10 @@ A dynamic web application to search and explore movie details using the OMDB API
 - **Backend**: Node.js, Express.js
 - **API**: OMDB API
 
+## 🌐 Live Demo
+
+👉 [Try the Movie Finder App](https://movie-finder-app-swze.onrender.com)
+
 ## 📦 Installation
 
 1. Clone the repository:  
@@ -52,3 +56,18 @@ A dynamic web application to search and explore movie details using the OMDB API
     ```
     http://localhost:3000
     ```
+
+## 🧾 License
+
+This project is licensed under the **MIT License**.
+
+## 🙌 Acknowledgements
+
+- [OMDB API](http://www.omdbapi.com/)
+- Node.js & Express.js documentation
+
+## 👨‍💻 Author
+
+- **Harshwardhan Dhaneliya**  
+  [GitHub](https://github.com/harshwardhan-d)  
+  [LinkedIn](https://www.linkedin.com/in/harshwardhan-dhaneliya-8642b4326/)
