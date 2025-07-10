@@ -1,0 +1,21 @@
+{
+  "name": "movie-finder-app",
+  "version": "1.0.0",
+  "description": "A full-stack movie finder app with Express backend and static frontend",
+  "main": "backend/server.js",
+  "scripts": {
+    "start": "node backend/server.js",
+    "dev": "nodemon backend/server.js"
+  },
+  "keywords": [],
+  "author": "Harshwardhan",
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^17.1.0",
+    "express": "^5.1.0",
+    "node-fetch": "^2.7.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}
